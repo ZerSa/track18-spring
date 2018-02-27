@@ -25,6 +25,7 @@ public class App {
                 .asJson();
 
         boolean success = r.getBody().getObject().get("success");
+        System.out.println(success);
 
        // 1) Use Unirest.post(URL)
         // 2) Get response .asJson()
