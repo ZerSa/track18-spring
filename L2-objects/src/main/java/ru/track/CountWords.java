@@ -1,6 +1,10 @@
 package ru.track;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 
 
 /**
@@ -39,8 +43,53 @@ public class CountWords {
      * @param file - файл с данными
      * @return - целое число - сумма всех чисел из файла
      */
+    public static void main(String[] args) throws Exception{
+        CountWords cw = new CountWords("skip");
+        File src = new File("/home/zersa/Study/tehnotrek/java/git/track18-spring/L2-objects/words.txt");
+        System.out.println(cw.concatWords(src));
+        //cw.concatWords(src);
+    }
+
     public long countNumbers(File file) throws Exception {
-        return 0;
+        FileReader fileReader = new FileReader(file);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        long result = 0;
+        while(true){
+            String line = bufferedReader.readLine();
+            if (line == null){
+                break;
+            }
+            if (line.equals(this.skipWord)) {
+                continue;
+            }
+            if (StringUtils.isNumeric(line)) {
+                result = result + Integer.parseInt(line);
+            }
+        }
+
+        return result;
+    }
+
+    public String concatWords(File file) throws Exception {
+        StringBuilder result = new StringBuilder("");
+        FileReader fileReader = new FileReader(file);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        while(true){
+             String line = bufferedReader.readLine();
+            if (line == null){
+                break;
+            }
+            if (line.equals(this.skipWord)){
+                continue;
+            }
+            if (StringUtils.isNumeric(line)) {
+                continue;
+            }
+            result = result.append(line);
+            result = result.append(" ");
+
+        }
+        return result.toString();
     }
 
 
@@ -51,9 +100,6 @@ public class CountWords {
      * @param file - файл с данными
      * @return - результирующая строка
      */
-    public String concatWords(File file) throws Exception {
-        return null;
-    }
 
 }
 
