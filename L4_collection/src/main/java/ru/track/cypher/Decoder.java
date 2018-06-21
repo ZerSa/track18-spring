@@ -1,7 +1,7 @@
 package ru.track.cypher;
 
 import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +24,15 @@ public class Decoder {
 
         cypher = new LinkedHashMap<>();
 
+        Iterator<Character> domainIterator = domainHist.keySet().iterator();
+        Iterator<Character> encryptedIterator = encryptedDomainHist.keySet().iterator();
 
+        while (encryptedIterator.hasNext()) {
+            char encryptedCh = encryptedIterator.next();
+            char domainCh = domainIterator.next();
+            cypher.put(encryptedCh, domainCh);
+
+        }
     }
 
     public Map<Character, Character> getCypher() {
@@ -39,7 +47,18 @@ public class Decoder {
      */
     @NotNull
     public String decode(@NotNull String encoded) {
-        return null;
+        StringBuilder decoded = new StringBuilder();
+        encoded = encoded.toLowerCase();
+        for (int i = 0; i < encoded.length(); i++){
+            char c = encoded.charAt(i);
+            if (Character.isLetter(c)){
+                decoded.append(cypher.get(c));
+            }
+            else{
+                decoded.append(c);
+            }
+        }
+        return decoded.toString();
     }
 
     /**
@@ -53,7 +72,29 @@ public class Decoder {
      */
     @NotNull
     Map<Character, Integer> createHist(@NotNull String text) {
-        return null;
+        Map<Character, Integer> hist = new HashMap<>();
+        text = text.toLowerCase();
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if (Character.isLetter(c)) {
+                if (hist.containsKey(c)) {
+                    int val = hist.get(c);
+                    hist.put(c, val + 1);
+                } else {
+                    hist.put(c, 1);
+                }
+            }
+        }
+
+        List<Map.Entry<Character, Integer>> entries = new ArrayList<>(hist.entrySet());
+        entries.sort((o1, o2) -> o2.getValue().compareTo(o1.getValue()));
+
+        Map<Character, Integer> sortedMap = new LinkedHashMap<>();
+        for (Map.Entry<Character, Integer> entry : entries) {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+
+        return sortedMap;
     }
 
 }
